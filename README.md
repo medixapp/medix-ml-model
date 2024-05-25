@@ -1,1 +1,1 @@
-# medix-ml-model
+# Repository for Machine Learning Path
