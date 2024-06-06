@@ -151,16 +151,21 @@ def shuffle(dataframe: pd.DataFrame, random_state: int = 1) -> pd.DataFrame :
   except Exception as e :
     print(e)
 
-def give_numerical_label(dataframe: pd.DataFrame, labels_col: str) -> pd.DataFrame :
+def give_numerical_label(dataframe: pd.DataFrame, labels_col: str) -> tuple[pd.DataFrame, dict] :
   """
   Give numerical labels for the class column
   
   Params :
   
   1. dataframe : pd.DataFrame
+  
   2. labels_col : str -> name of label column.
   
-  Return : pandas.DataFrame -> Annotated pandas.DataFrame
+  Return : 
+  
+  1. pandas.DataFrame -> Annotated pandas.DataFrame
+  
+  2. col_dict : dict -> Dictionary that saves labels in integer as the key and the real labels as the values.
   """
   
   try:
