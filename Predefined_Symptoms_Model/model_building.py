@@ -54,4 +54,4 @@ def train_model(model, x_train, y_train, x_val, y_val, epochs=100):
     return history
 
 def save_model(model: tf.keras.models.Model) :
-    model.save('model.h5')
+    model.save('predefined_model.h5')
