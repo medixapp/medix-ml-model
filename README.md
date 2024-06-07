@@ -10,4 +10,5 @@ We were planning to make 2 DNN models, the purposes are listed here.
 
 # Model Building's Notebook
 [Disease Prediction with Predefined Symptoms](https://github.com/medixapp/medix-ml-model/tree/main/Predefined_Symptoms_Model).
-[Disease Prediction with Word Embedding](https://github.com/medixapp/medix-ml-model/tree/main/Word_Embeddings_Model)
+
+[Disease Prediction with Word Embedding](https://github.com/medixapp/medix-ml-model/tree/main/Word_Embeddings_Model).
