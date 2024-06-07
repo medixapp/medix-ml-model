@@ -25,8 +25,10 @@ def preprocess_input(input_symptoms, all_symptoms):
     return input_data
 
 def predict_and_display(input_data, model, label_encoder):
+    
+    input_data = np.array(input_data).reshape((1, -1))
     # Make predictions
-    predictions = model.predict([input_data])
+    predictions = model.predict(input_data)
 
     # Get the index of the highest probability prediction
     max_prob_index = np.argmax(predictions)
