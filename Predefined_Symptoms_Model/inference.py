@@ -3,8 +3,8 @@ import tensorflow as tf
 from sklearn.preprocessing import LabelEncoder
 import json
 
-model = tf.keras.models.load_model('model.h5')  # Load your trained model
-label_encoder = LabelEncoder()  # Define and load your LabelEncoder here
+model = tf.keras.models.load_model('model.h5')
+label_encoder = LabelEncoder()
 
 with open('all_symptoms.txt', 'r') as symptoms_file:
     all_symptoms = symptoms_file.read().split(',')
@@ -38,7 +38,7 @@ def predict_and_display(input_data, model, label_encoder):
     max_prob = predictions[0][max_prob_index]
 
     # Display the predicted class and its probability
-    print(f"Predicted Class: {predicted_class}")
+    print(f"Predicted Class: {predicted_class}, Probability: {max_prob}")
 
 if __name__ == "__main__":
     # Get input symptoms from the user
