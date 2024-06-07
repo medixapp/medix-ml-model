@@ -3,7 +3,7 @@ import tensorflow as tf
 from sklearn.preprocessing import LabelEncoder
 import json
 
-model = tf.keras.models.load_model('model.h5')
+model = tf.keras.models.load_model('predefined_model.h5')
 label_encoder = LabelEncoder()
 
 with open('all_symptoms.txt', 'r') as symptoms_file:
