@@ -48,3 +48,4 @@ if __name__ == "__main__":
     # Preprocess input data and make predictions
     input_data = preprocess_input(input_symptoms, all_symptoms)
     predict_and_display(input_data, model, label_encoder)
+
