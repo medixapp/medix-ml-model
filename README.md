@@ -8,6 +8,6 @@ We were planning to make 2 DNN models, the purposes are listed here.
 
 2. (Postponed) QnA-Based Chatbot to answer questions related to mental health. To achieve this, we would do fine-tuning or transfer learning from pre-trained model.
 
-# Model Building's Notebook
+# Model Building's Folder
 - [Disease Prediction with Predefined Symptoms](https://github.com/medixapp/medix-ml-model/tree/main/Predefined_Symptoms_Model).
 - [Disease Prediction with Word Embedding](https://github.com/medixapp/medix-ml-model/tree/main/Word_Embeddings_Model).
