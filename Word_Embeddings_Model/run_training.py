@@ -15,7 +15,8 @@ def run_training():
                 ['accuracy'])
 
     history = training(model, (train_sequenced, test_sequenced))
-    print("Training accuracy = {}\nTesting accuracy = {}".format(history.history['accuracy'][-1], history.history['val_accuracy'][-1]))
+    print("\nTraining accuracy = {:.2f} %\nTesting accuracy = {:.2f} %".format(history.history['accuracy'][-1]*100,
+                                                                               history.history['val_accuracy'][-1]*100))
     
     save_model(model)
     
