@@ -143,13 +143,7 @@ def shuffle_and_split(dataframe, label_col, test_size=0.2, random_state=42):
     # Split the data into train and test sets
     df_train, df_test = train_test_split(df_shuffled, test_size=test_size, stratify=df_shuffled[label_col],
                                          random_state=random_state)
-
-    # # Print class distribution in both sets
-    # print("Train set class distribution:")
-    # print(df_train[label_col].value_counts())
-    # print("\nTest set class distribution:")
-    # print(df_test[label_col].value_counts())
-
+    
     return df_train, df_test
 
 def extract_features_and_labels(df_train, df_test, label_col):
@@ -170,12 +164,6 @@ def extract_features_and_labels(df_train, df_test, label_col):
     # Extract features and labels
     x_train, y_train = df_train.drop(label_col, axis=1), df_train[label_col]
     x_test, y_test = df_test.drop(label_col, axis=1), df_test[label_col]
-
-    # # Print the shape of each set
-    # print("Shape of x_train:", x_train.shape)
-    # print("Shape of y_train:", y_train.shape)
-    # print("Shape of x_test:", x_test.shape)
-    # print("Shape of y_test:", y_test.shape)
 
     # Convert features to int32
     x_train, x_test = x_train.astype('int32'), x_test.astype('int32')
