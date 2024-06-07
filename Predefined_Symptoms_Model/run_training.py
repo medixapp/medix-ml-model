@@ -1,3 +1,5 @@
+import json
+import tensorflow as tf
 from preprocess_data import*
 from model_building import*
 
@@ -38,6 +40,17 @@ def run_training():
     print(f'Test accuracy: {accuracy}')
 
     save_model(model)
+
+    unique_symptoms = set()
+    for symptoms in df['Gejala'].str.split(', '):
+        unique_symptoms.update(symptoms)
+    with open('all_symptoms.txt', 'w') as txt_file:
+        txt_file.write(','.join(sorted(unique_symptoms)))
+
+    unique_labels = df['Penyakit'].unique().tolist()
+    class_dict = {i: label for i, label in enumerate(unique_labels)}
+    with open('class_dict.json', 'w') as json_file:
+        json.dump(class_dict, json_file)
 
 if __name__ == "__main__" :
     run_training()
