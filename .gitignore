@@ -1,1 +1,3 @@
 __pycache__/ 
+Word_Embeddings_Model/*.json 
+Word_Embeddings_Model/*.h5 
