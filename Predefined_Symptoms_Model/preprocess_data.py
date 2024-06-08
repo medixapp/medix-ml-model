@@ -23,7 +23,8 @@ def get_pencernaan_data():
     return df
 
 
-def sample_data(dataframe, col_of_list, label_col, num_samples=5, n=5):
+def sample_data(dataframe, col_of_list, label_col,
+                num_samples=5, n=5, random_state=0):
     """
     Sample data from a DataFrame where one column contains lists and another contains labels.
 
@@ -33,10 +34,12 @@ def sample_data(dataframe, col_of_list, label_col, num_samples=5, n=5):
     - label_col (str): The column name which contains labels.
     - num_samples (int): Number of samples to generate for each record.
     - n (int): Number of elements to sample from each list.
+    - random_state (int): Random seed for reproducibility.
 
     Returns:
     - pd.DataFrame: A new DataFrame with sampled data.
     """
+    np.random.seed(random_state)
     samples, labels = [], []
     col_of_list_index = dataframe.columns.to_list().index(col_of_list)
     label_col_index = dataframe.columns.to_list().index(label_col)
@@ -67,7 +70,8 @@ def sample_data(dataframe, col_of_list, label_col, num_samples=5, n=5):
     return new_df
 
 
-def sample_multiple_n(dataframe, col_of_list, label_col, num_samples=20, n_values=[5, 4, 3, 2]):
+def sample_multiple_n(dataframe, col_of_list, label_col, num_samples=20,
+                      n_values=[5, 4, 3, 2], random_state=0):
     """
     Create multiple sampled DataFrames for different values of n and concatenate them.
 
@@ -77,6 +81,7 @@ def sample_multiple_n(dataframe, col_of_list, label_col, num_samples=20, n_value
     - label_col (str): The column name which contains labels.
     - num_samples (int): Number of samples to generate for each record.
     - n_values (list of int): List of n values to use for sampling.
+    - random_state (int): Random seed for reproducibility.
 
     Returns:
     - pd.DataFrame: A concatenated DataFrame with all samples.
@@ -84,7 +89,7 @@ def sample_multiple_n(dataframe, col_of_list, label_col, num_samples=20, n_value
     sampled_dfs = [dataframe]
 
     for n in n_values:
-        sampled_df = sample_data(dataframe, col_of_list, label_col, num_samples, n)
+        sampled_df = sample_data(dataframe, col_of_list, label_col, num_samples, n, random_state=random_state)
         sampled_dfs.append(sampled_df)
 
     concatenated_df = pd.concat(sampled_dfs).sort_values(by=[label_col]).reset_index(drop=True)
@@ -101,6 +106,7 @@ def one_hot_encode_symptoms(dataframe, symptoms_col, label_col):
 
     Returns:
     - pd.DataFrame: A DataFrame with one-hot encoded symptoms and the original labels.
+    - all_symptoms: list of labels.
     """
     # Ensure symptoms elements are lists
     dataframe[symptoms_col] = dataframe[symptoms_col].apply(
@@ -119,7 +125,7 @@ def one_hot_encode_symptoms(dataframe, symptoms_col, label_col):
     # Concatenate the label column with the one-hot encoded DataFrame
     df_final = pd.concat([dataframe[label_col], one_hot_encoded_df], axis=1)
 
-    return df_final
+    return df_final, all_symptoms
 
 
 def shuffle_and_split(dataframe, label_col, test_size=0.2, random_state=42):
