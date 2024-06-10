@@ -49,7 +49,7 @@ def get_label_dict() -> dict:
     return new_label_dict
 
 def to_sequence(string: str, word_index: dict,
-                max_length: int = 50) -> np.ndarray :
+                max_length: int = 88) -> np.ndarray :
     """
     Convert the sentence into sequence of integers, refers from the word index.
     
