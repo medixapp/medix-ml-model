@@ -13,7 +13,7 @@ def get_data() -> pd.DataFrame :
   """
   
   try :
-    df = pd.read_csv('List Penyakit - Pencernaan_Embeddings.csv')
+    df = pd.read_csv('Digestion Diseases Symptoms.csv')
   except Exception as e :
     print(e)
   
