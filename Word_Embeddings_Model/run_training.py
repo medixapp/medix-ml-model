@@ -4,7 +4,7 @@ import json
 
 def run_training():
     train_data, test_data, col_dict = get_train_test_data("Gejala", "Penyakit",
-                                                        [20,20,20,20], [5,4,3,2])
+                                                        [20]*7, [8,7,6,5,4,3,2])
 
     train_sequenced, test_sequenced, word_index = get_train_test_sequences((train_data, test_data))
 
