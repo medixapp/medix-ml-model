@@ -58,7 +58,7 @@ def get_train_test_data(col_of_list: str,
     return train_data, test_data, col_dict
 
 def get_train_test_sequences(data: tuple, vocab_size: int = 1000,
-                             max_length: int = 50, oov_tok: str = "<UNK>",
+                             max_length: int = 88, oov_tok: str = "<UNK>",
                              padding_type: str = "post", trunc_type: str = "post") -> tuple[tuple, tuple, dict] :
     """
     Get training and testing sequences with their labels.
@@ -103,8 +103,8 @@ def get_train_test_sequences(data: tuple, vocab_size: int = 1000,
     test_data = test_sequences, test_labels
     return train_data, test_data, tokenizer.word_index
 
-def build_model(vocab_size: int = 1000, embedding_dim: int = 16,
-                max_length: int = 50, print_summary: bool = False) -> tf.keras.models.Model :
+def build_model(vocab_size: int = 1000, embedding_dim: int = 32,
+                max_length: int = 88, print_summary: bool = False) -> tf.keras.models.Model :
     """
     Building Deep Learning model for text classification.
     
@@ -159,7 +159,7 @@ def compile_model(model: tf.keras.models.Model,
                   loss=loss,
                   metrics=metrics)
     
-def make_callback(threshold: float = 0.95) -> tf.keras.callbacks.Callback :
+def make_callback(threshold: float = 0.98) -> tf.keras.callbacks.Callback :
     """
     Make custom callback that stop training where the metrics have reached certain threshold.
     
