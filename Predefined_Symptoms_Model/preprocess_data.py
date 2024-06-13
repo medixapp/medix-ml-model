@@ -8,14 +8,14 @@ from tensorflow.keras.utils import to_categorical
 
 def get_pencernaan_data():
     """
-    Get pandas.DataFrame for Pencernaan data.
+    Get pandas.DataFrame for disease and symptoms.
 
     Params: None
 
     Return: pandas.DataFrame
     """
     try:
-        df = pd.read_csv('list_penyakit - pencernaan.csv')
+        df = pd.read_csv('list_penyakit.csv')
     except Exception as e:
         print(e)
         df = pd.DataFrame()  # Return an empty DataFrame in case of an error
@@ -23,8 +23,7 @@ def get_pencernaan_data():
     return df
 
 
-def sample_data(dataframe, col_of_list, label_col,
-                num_samples=5, n=5, random_state=0):
+def sample_data(dataframe, col_of_list, label_col, num_samples=5, n=5):
     """
     Sample data from a DataFrame where one column contains lists and another contains labels.
 
@@ -34,12 +33,10 @@ def sample_data(dataframe, col_of_list, label_col,
     - label_col (str): The column name which contains labels.
     - num_samples (int): Number of samples to generate for each record.
     - n (int): Number of elements to sample from each list.
-    - random_state (int): Random seed for reproducibility.
 
     Returns:
     - pd.DataFrame: A new DataFrame with sampled data.
     """
-    np.random.seed(random_state)
     samples, labels = [], []
     col_of_list_index = dataframe.columns.to_list().index(col_of_list)
     label_col_index = dataframe.columns.to_list().index(label_col)
@@ -70,8 +67,7 @@ def sample_data(dataframe, col_of_list, label_col,
     return new_df
 
 
-def sample_multiple_n(dataframe, col_of_list, label_col, num_samples=20,
-                      n_values=[5, 4, 3, 2], random_state=0):
+def sample_multiple_n(dataframe, col_of_list, label_col, num_samples=20, n_values=[5, 4, 3, 2]):
     """
     Create multiple sampled DataFrames for different values of n and concatenate them.
 
@@ -81,7 +77,6 @@ def sample_multiple_n(dataframe, col_of_list, label_col, num_samples=20,
     - label_col (str): The column name which contains labels.
     - num_samples (int): Number of samples to generate for each record.
     - n_values (list of int): List of n values to use for sampling.
-    - random_state (int): Random seed for reproducibility.
 
     Returns:
     - pd.DataFrame: A concatenated DataFrame with all samples.
@@ -89,7 +84,7 @@ def sample_multiple_n(dataframe, col_of_list, label_col, num_samples=20,
     sampled_dfs = [dataframe]
 
     for n in n_values:
-        sampled_df = sample_data(dataframe, col_of_list, label_col, num_samples, n, random_state=random_state)
+        sampled_df = sample_data(dataframe, col_of_list, label_col, num_samples, n)
         sampled_dfs.append(sampled_df)
 
     concatenated_df = pd.concat(sampled_dfs).sort_values(by=[label_col]).reset_index(drop=True)
@@ -97,7 +92,7 @@ def sample_multiple_n(dataframe, col_of_list, label_col, num_samples=20,
 
 def one_hot_encode_symptoms(dataframe, symptoms_col, label_col):
     """
-    One-hot encode the symptoms in the specified column and concatenate the result with the label column.
+    One-hot encoding the symptoms in the specified column and concatenate the result with the label column.
 
     Params:
     - dataframe (pd.DataFrame): The input DataFrame.
@@ -105,8 +100,7 @@ def one_hot_encode_symptoms(dataframe, symptoms_col, label_col):
     - label_col (str): The column name containing the labels.
 
     Returns:
-    - pd.DataFrame: A DataFrame with one-hot encoded symptoms and the original labels.
-    - all_symptoms: list of labels.
+    - pd.DataFrame: A DataFrame with one-hot encoded symptoms with the original labels.
     """
     # Ensure symptoms elements are lists
     dataframe[symptoms_col] = dataframe[symptoms_col].apply(
@@ -125,13 +119,13 @@ def one_hot_encode_symptoms(dataframe, symptoms_col, label_col):
     # Concatenate the label column with the one-hot encoded DataFrame
     df_final = pd.concat([dataframe[label_col], one_hot_encoded_df], axis=1)
 
-    return df_final, all_symptoms
+    return df_final
 
 
 def shuffle_and_split(dataframe, label_col, test_size=0.2, random_state=42):
     """
     Shuffle the DataFrame and split it into train and test sets, ensuring that each class in the label column
-    is represented in both sets.
+    exist in both sets.
 
     Params:
     - dataframe (pd.DataFrame): The input DataFrame.
@@ -149,12 +143,12 @@ def shuffle_and_split(dataframe, label_col, test_size=0.2, random_state=42):
     # Split the data into train and test sets
     df_train, df_test = train_test_split(df_shuffled, test_size=test_size, stratify=df_shuffled[label_col],
                                          random_state=random_state)
-    
+
     return df_train, df_test
 
 def extract_features_and_labels(df_train, df_test, label_col):
     """
-    Extract features (X) and labels (y) from training and testing DataFrames.
+    Extract features (x) and labels (y) from training and testing DataFrames.
 
     Params:
     - df_train (pd.DataFrame): The training DataFrame.
