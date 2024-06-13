@@ -3,11 +3,14 @@ import tensorflow as tf
 from sklearn.preprocessing import LabelEncoder
 import json
 
+# Load the trained model
 model = tf.keras.models.load_model('predefined_model.h5')
+
+# Initialize the label encoder and load the necessary files
 label_encoder = LabelEncoder()
 
 with open('all_symptoms.txt', 'r') as symptoms_file:
-    all_symptoms = symptoms_file.read().split(',')
+    all_symptoms = [symptom.strip() for symptom in symptoms_file.read().split(',')]
 
 with open('class_dict.json', 'r') as class_json:
     class_dict = json.load(class_json)
@@ -15,18 +18,19 @@ with open('class_dict.json', 'r') as class_json:
 unique_classes = list(class_dict.values())
 label_encoder.fit(unique_classes)
 
+
 def preprocess_input(input_symptoms, all_symptoms):
-    # Remove any extra features not present in all_symptoms
-    input_symptoms = [symptom for symptom in input_symptoms if symptom in all_symptoms]
+    # Ensure only valid symptoms are considered
+    input_symptoms = [symptom.strip() for symptom in input_symptoms if symptom.strip() in all_symptoms]
 
-    # Ensure the input data has the same number of features as the model expects
-    input_data = [int(symptom in input_symptoms) for symptom in all_symptoms[:58]]
+    # Create a binary representation of the symptoms
+    input_data = [int(symptom in input_symptoms) for symptom in all_symptoms][:68]
 
-    return input_data
+    # Reshape to match the model's expected input shape
+    return np.array(input_data).reshape((1, -1))
+
 
 def predict_and_display(input_data, model, label_encoder):
-    
-    input_data = np.array(input_data).reshape((1, -1))
     # Make predictions
     predictions = model.predict(input_data)
 
@@ -40,7 +44,8 @@ def predict_and_display(input_data, model, label_encoder):
     max_prob = predictions[0][max_prob_index]
 
     # Display the predicted class and its probability
-    print(f"Predicted Class: {predicted_class}, Probability: {max_prob}")
+    print(f"Predicted Class: {predicted_class}, Probability: {max_prob:.2f}")
+
 
 if __name__ == "__main__":
     # Get input symptoms from the user
@@ -50,4 +55,3 @@ if __name__ == "__main__":
     # Preprocess input data and make predictions
     input_data = preprocess_input(input_symptoms, all_symptoms)
     predict_and_display(input_data, model, label_encoder)
-
