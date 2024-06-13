@@ -12,7 +12,7 @@ def run_training():
     df_sampled = sample_multiple_n(df, "Gejala", "Penyakit", num_samples=20)
 
     # Get one hot encoded data
-    df_final, all_symptoms = one_hot_encode_symptoms(df_sampled, 'Gejala', 'Penyakit')
+    df_final = one_hot_encode_symptoms(df_sampled, 'Gejala', 'Penyakit')
 
     # Get training and testing set
     df_train, df_test = shuffle_and_split(df_final, 'Penyakit', test_size=0.2)
@@ -26,7 +26,7 @@ def run_training():
     # Determine input shape and number of classes
     num_classes = y_train_encoded.shape[1]
 
-    # Build the model
+    # Define the model
     model = build_model(num_classes)
 
     # Compile the model
@@ -42,10 +42,15 @@ def run_training():
 
     save_model(model)
 
+    # Get unique symptoms and labels
+    unique_symptoms = set()
+    for symptoms in df['Gejala'].str.split(', '):
+        unique_symptoms.update(symptoms)
     with open('all_symptoms.txt', 'w') as txt_file:
-        txt_file.write(",".join(all_symptoms))
+        txt_file.write(', '.join(sorted(unique_symptoms)))
 
-    class_dict = {i: label_encoder.inverse_transform([i])[0] for i in range(14)}
+    unique_labels = df['Penyakit'].unique().tolist()
+    class_dict = {i: label for i, label in enumerate(unique_labels)}
     with open('class_dict.json', 'w') as json_file:
         json.dump(class_dict, json_file)
 
