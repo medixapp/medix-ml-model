@@ -15,11 +15,11 @@ def build_model(num_classes):
         tf.keras.layers.Dense(32, activation='relu'),
         tf.keras.layers.Dense(64, activation='relu'),
         tf.keras.layers.Dropout(0.2),
-        tf.keras.layers.Dense(num_classes, activation='softmax')
+        tf.keras.layers.Dense(14, activation='softmax')
     ])
     return model
 
-def compile_model(model, learning_rate=0.001):
+def compile_model(model, learning_rate=0.0001):
     """
     Compile a Keras model.
 
@@ -35,7 +35,7 @@ def compile_model(model, learning_rate=0.001):
                   metrics=['accuracy'])
     return model
 
-def train_model(model, x_train, y_train, x_val, y_val, epochs=100):
+def train_model(model, x_train, y_train, x_val, y_val, epochs=1000):
     """
     Train a Keras model.
 
@@ -50,7 +50,8 @@ def train_model(model, x_train, y_train, x_val, y_val, epochs=100):
     Returns:
     - history (tf.keras.callbacks.History): History object containing training history.
     """
-    history = model.fit(x_train, y_train, epochs=epochs, validation_data=(x_val, y_val))
+    early_stopping = tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=5, restore_best_weights=True)
+    history = model.fit(x_train, y_train, epochs=epochs, validation_data=(x_val, y_val), callbacks=[early_stopping])
     return history
 
 def save_model(model: tf.keras.models.Model) :
