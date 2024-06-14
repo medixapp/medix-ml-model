@@ -1,3 +1,5 @@
+import os
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 import tensorflow as tf
 import re
 import json
@@ -49,7 +51,7 @@ def get_label_dict() -> dict:
     return new_label_dict
 
 def to_sequence(string: str, word_index: dict,
-                max_length: int = 88) -> np.ndarray :
+                max_length: int = 50) -> np.ndarray :
     """
     Convert the sentence into sequence of integers, refers from the word index.
     
@@ -116,4 +118,9 @@ def main() :
     print("\nPrediction : {}".format(pred))
 
 if __name__ == "__main__" :
-    main()
+    repeat = True
+    while repeat :
+        main()
+        repeat_ans = input("Masukkan input lagi? (Y/N) : ").strip()
+        if repeat_ans.lower() != 'y' :
+            repeat = False
