@@ -4,3 +4,5 @@ Word_Embeddings_Model/*.h5
 Predefined_Symptoms_Model/*.txt 
 Predefined_Symptoms_Model/*.json 
 Predefined_Symptoms_Model/*.h5 
+Word_Embeddings_Model/Train.csv 
+Word_Embeddings_Model/Test.csv 
