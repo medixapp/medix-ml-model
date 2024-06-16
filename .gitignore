@@ -6,3 +6,5 @@ Predefined_Symptoms_Model/*.json
 Predefined_Symptoms_Model/*.h5 
 Word_Embeddings_Model/Train.csv 
 Word_Embeddings_Model/Test.csv 
+Fine_Tuned_QnA_Chatbot/model/* 
+Fine_Tuned_QnA_Chatbot/tokenizer/* 
