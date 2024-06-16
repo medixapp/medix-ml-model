@@ -51,7 +51,8 @@ def index():
     end_position = np.argmax(outputs.end_logits[0])
     
     # Get the answer from the context
-    response = inputs['input_ids'][0, start_position : end_position + 1]
+    response_ids = inputs['input_ids'][0, start_position : end_position + 1]
+    response = tokenizer.decode(response_ids)
 
     # Return the answer
     return jsonify({'answer': response})
