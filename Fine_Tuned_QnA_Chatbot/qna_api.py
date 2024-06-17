@@ -28,7 +28,7 @@ def index():
     # Inference
     inputs = tokenizer(question, context, return_tensors="np")
     if len(inputs['input_ids'][0]) > 512 :
-        response = predict_long_context(question, context, model)
+        response = predict_long_context(question, context, model, tokenizer)
     
     else :
         outputs = model(inputs)
