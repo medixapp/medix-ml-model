@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import numpy as np
 import os
 from transformers import AutoTokenizer, TFAutoModelForQuestionAnswering
+from inference_helper import *
 
 # Predefined Context
 with open('Context.txt', 'r') as file :
@@ -26,15 +27,19 @@ def index():
     
     # Inference
     inputs = tokenizer(question, context, return_tensors="np")
-    outputs = model(inputs)
+    if len(inputs['input_ids'][0]) > 512 :
+        response = predict_long_context(question, context, model)
     
-    # Get the maximum probabilities for start and end positions.
-    start_position = np.argmax(outputs.start_logits[0])
-    end_position = np.argmax(outputs.end_logits[0])
-    
-    # Get the answer from the context
-    response_ids = inputs['input_ids'][0, start_position : end_position + 1]
-    response = tokenizer.decode(response_ids)
+    else :
+        outputs = model(inputs)
+        
+        # Get the maximum probabilities for start and end positions.
+        start_position = np.argmax(outputs.start_logits[0])
+        end_position = np.argmax(outputs.end_logits[0])
+        
+        # Get the answer from the context
+        response_ids = inputs['input_ids'][0, start_position : end_position + 1]
+        response = tokenizer.decode(response_ids)
 
     # Return the answer
     return jsonify({'answer': response})
