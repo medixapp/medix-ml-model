@@ -32,7 +32,7 @@ def predict_long_context(question, context, model, tokenizer) :
   input_data = preprocess_input(question, context, tokenizer)
   sequence_ids = input_data.sequence_ids()
 
-  ctx_start, ctx_end = get_answer_span(sequences_ids)
+  ctx_start, ctx_end = get_answer_span(sequence_ids)
 
   num_samples = len(input_data['input_ids'])
   for i in range(num_samples) :
@@ -44,7 +44,7 @@ def predict_long_context(question, context, model, tokenizer) :
     end_pred = np.argmax(outputs.end_logits[0])
     answers.append(tokenizer.decode(input_cleaned['input_ids'][0, start_pred:end_pred+1]))
 
-    if start_pred < ctx_start or end_pred > ctx_end or start >= end :
+    if (start_pred < ctx_start) or (end_pred > ctx_end) or (start_pred >= end_pred) :
       scores.append(0)
       starts.append(0)
       ends.append(0)
