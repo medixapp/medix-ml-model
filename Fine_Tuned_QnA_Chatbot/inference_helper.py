@@ -14,7 +14,14 @@ def preprocess_input(question, context, tokenizer) :
                              padding='max_length',
                              return_tensors='np')
   return tokenized_data
- 
+
+def get_answer_span(sequences) :
+  first_1_idx = sequences.index(1)
+  max_index = len(sequences) - 1
+  reversed_seq = list(reversed(sequences))
+  last_1_idx = max_index - reversed_seq.index(1)
+  return first_1_idx, last_1_idx
+
 def predict_long_context(question, context, model, tokenizer) :
   MAX_LENGTH = 512
   STRIDE = 256
@@ -25,26 +32,19 @@ def predict_long_context(question, context, model, tokenizer) :
   input_data = preprocess_input(question, context, tokenizer)
   sequence_ids = input_data.sequence_ids()
 
-  ctx_start = 0
-  ctx_end = len(sequence_ids) - 1
-
-  while sequence_ids[ctx_start] != 1 :
-    ctx_start += 1
-
-  while sequence_ids[ctx_end] != 1 :
-    ctx_end -= 1
+  ctx_start, ctx_end = get_answer_span(sequences_ids)
 
   num_samples = len(input_data['input_ids'])
   for i in range(num_samples) :
     input_cleaned = {'input_ids':np.expand_dims(input_data['input_ids'][i], axis=0),
                       'token_type_ids':np.expand_dims(input_data['token_type_ids'][i], axis=0),
                       'attention_mask':np.expand_dims(input_data['attention_mask'][i], axis=0)}
-    outputs = model(input_cleaned)
+    outputs = model.predict(input_cleaned, use_multiprocessing=True)
     start_pred = np.argmax(outputs.start_logits[0])
     end_pred = np.argmax(outputs.end_logits[0])
     answers.append(tokenizer.decode(input_cleaned['input_ids'][0, start_pred:end_pred+1]))
 
-    if start_pred < ctx_start or end_pred > ctx_end :
+    if start_pred < ctx_start or end_pred > ctx_end or start >= end :
       scores.append(0)
       starts.append(0)
       ends.append(0)

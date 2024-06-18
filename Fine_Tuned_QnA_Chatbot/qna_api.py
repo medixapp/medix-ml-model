@@ -23,7 +23,7 @@ app  = Flask(__name__)
 def index():
     
     # Get the request
-    question = request.json['question']
+    question = request.form.get['question']
     
     # Inference
     inputs = tokenizer(question, context, return_tensors="np")
