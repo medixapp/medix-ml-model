@@ -46,6 +46,8 @@ def index():
         elif 'flu perut' in question or 'muntaber' in question or 'gastroenteritis' in question :
             with open('Gastroenteritis.txt', 'r') as file :
                 context = file.read()
+        else :
+            response = "Maaf, saya tidak bisa menjawab pertanyaan yang diberikan. Coba sebutkan penyakit pada pertanyaannya."
     
         # Inference
         inputs = tokenizer(question, context, return_tensors="np")
