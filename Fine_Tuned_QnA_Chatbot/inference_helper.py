@@ -54,11 +54,9 @@ def predict_long_context(question, context, model, tokenizer) :
       ends.append(end_pred)
 
   highest_score = np.argmax(np.array(scores))
-  start_max = starts[highest_score]
-  end_max = ends[highest_score]
 
   if scores[highest_score] > 0 :
     answer = answers[highest_score]
     return answer
   else :
-    return "Maaf, kami tidak bisa menjawab pertanyaan yang diberikan."
+    return "Maaf, saya tidak bisa menjawab pertanyaan yang diberikan."
